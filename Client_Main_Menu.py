@@ -1,17 +1,22 @@
-from numpy.lib.function_base import _quantile_ureduce_func
 from login import clientid
-from main import transaction, Check_loan
+from main import transaction, Check_loan, notice, number_ofloan_ofaclinet, curr_format, new_loan, pay_now, pay_shcd
 import os
 # print()
 a = 0
 while a == 0:
-    Check_loan()
     try:
-        exec(open("notics.py").read())
-        print("PRESS 'q' TO RETURN TO MAIN MENU ANYWHERE IN THE PROGRAM !")
-        print("*******************************")
-        print("* 1.NEW LOAN                  *\n* 2.NO OF LOAN IS             *\n* 3.PREVIOUS TRANSACTION      *\n* 4.PAY YOUR CURRENT LOAN     *\n* 5.PAYMENT SCHEDULE FOR LOAN *\n* 6.LOGOUT                    *")
-        print("*******************************")
+        Check_loan()
+        notice(clientid)
+        print()
+        print("\t\t*--------*-----------*--------*")
+        print("\t\t|\t | MAIN MENU |        |")
+        print("\t\t|\t *-----------*        |")
+        print("\t\t|\t                      |")
+        print("\t\t| 1.NEW LOAN                  |\n\t\t| 2.NO OF LOAN IS             |\n\t\t| 3.PREVIOUS TRANSACTION      |\n\t\t| 4.PAY YOUR CURRENT LOAN     |\n\t\t| 5.PAYMENT SCHEDULE FOR LOAN |\n\t\t| 6.LOGOUT                    |")
+        print("\t\t|\t                      |")
+        print("\t\t*-----------------------------*")
+        print("PRESS 'q' TO RETURN TO MAIN MENU ANYWHERE IN THE PROGRAM!")
+
         ch = int(input("ENTER YOUR CHOICE : "))
 
         if ch == 1:
@@ -19,15 +24,16 @@ while a == 0:
             print("NEW LOAN IS LOADING")
             print()
             # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-            exec(open("new_loan.py").read())
+            # exec(open("new_loan.py").read())
+            new_loan(clientid)
             continue
         elif ch == 2:
-            print("NO OF LOANS IS")
-            print()
-            exec(open("no_of_loans.py").read())
+            print("NUMBER OF LOAN IS")
+            # exec(open("no_of_loans.py").read())
+            number_ofloan_ofaclinet(clientid)
             continue
         elif ch == 3:
-            print("YOUR PREVIOUS TRANSACTION ")
+            print("YOUR PREVIOUS TRANSACTION :")
             print()
 
             # exec(open("transaction_history.py").read())
@@ -40,7 +46,9 @@ while a == 0:
                 print()
             else:
                 print(trans_hist)
-                print("YOUR TOTAL NO. OF PAID AMOUNT IS : ", trans_am)
+                print()
+                print("YOUR TOTAL NO. OF PAID AMOUNT IS : ",
+                      curr_format(trans_am))
                 print()
 
             continue
@@ -48,35 +56,40 @@ while a == 0:
 
             print("Pay Now !")
             print()
-            exec(open("pay_now.py").read())
+            # exec(open("pay_now.py").read())
+            pay_now(clientid)
             continue
 
         elif ch == 5:
             print("PAYMENT SCHEDULE")
             print()
-            exec(open("pay_shcd.py").read())
+            # exec(open("pay_shcd.py").read())
+            pay_shcd(clientid)
             continue
         elif ch == 6:
             print("LOGGING OUT .....")
             print()
             print("Thank you For Visting !")
             print()
-            # KeyError
             raise ZeroDivisionError
 
         else:
             print("PLEASE RE ENTER YOUR CHOICE !!!")
             print()
             continue
-    except ZeroDivisionError:
-        print("LOG OUT !")
-        print()
-        os.abort()
-        break
-    except ChildProcessError:
-        print("MAIN MENU")
+
+    except ChildProcessError:  # used in q for returning to main menu
         print()
         continue
+
+    except ZeroDivisionError:
+        print()
+        os.abort()
+
+    except ModuleNotFoundError:
+        print("INSTALL NECESSARY MODUALS !!! ")
+        print("REQUIRED MODUAL :- 1) PANDAS 2) MATHPOTLIB")
+        break
     except:
 
         print("INVALID!!!")

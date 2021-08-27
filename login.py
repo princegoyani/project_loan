@@ -1,5 +1,5 @@
 from getpass import getpass
-from numpy import who
+import os
 import pandas as pd
 import random
 
@@ -8,12 +8,10 @@ def login():
 
     while True:
         try:
-
             databas = pd.read_csv("ClientLoginInfo.csv", sep=",",
                                   header=0)
             # databas.index
             # print(databas)
-
             loginid = databas["Client ID"]
             acc_no = databas["ACCOUNT No"]
             # print(loginid)
@@ -31,13 +29,11 @@ def login():
                         loginid_client = loginid.loc[index]
                         # print(idindex)
 
-                        print()
                         print("ID is matched : ", dataid)
                         print()
                         while True:
                             password = getpass("ENTER YOUR PASSWORD : ")
                             if str(password) == str(databas.loc[idindex, "Password"]):
-                                print()
                                 print("PASSWORD MATCH")
                                 print()
                                 # START FROM HERE
@@ -61,7 +57,8 @@ def login():
             else:
                 print()
                 print("TRY AGAIN LATER")
-                print()
+                os.abort()
+
             break
         except ValueError:
             print()
@@ -100,7 +97,7 @@ def registration():
         try:
             first_name = input("Enter Your First Name : ").capitalize()
             last_name = input("Enter Your Last Name : ").capitalize()
-            if len(first_name) <= 3 or len(last_name) <= 3:
+            if len(first_name) <= 1 or len(last_name) <= 1:
                 print()
                 print("ENTER CORRECT NAME")
                 print()
@@ -167,9 +164,10 @@ def registration():
             print("TRY AGAIN !")
             print()
             continue
+    print("*********************************")
     print("YOUR ACCOUNT NUMBER IS :", acc_no)
-    print()
     print(f"Your CLIENT ID IS : {client_id}")
+    print("*********************************")
     print()
 
     database.to_csv('Client_Personal_Info.csv', index=False)
@@ -177,10 +175,13 @@ def registration():
 
 
 while True:
-
-    print("******************")
-    print("* 1)LOGIN        *\n* 2)Registration *")
-    print("******************")
+    print("\t     *-----*-------------------------*-----*")
+    print("\t     |     | WELCOME TO EASY FINANCE |     |")
+    print("\t     |     *-------------------------*     |")
+    print("\t     |                                     |")
+    print("\t     |          1)Login                    |\n\t     |          2)Registration             |")
+    print("\t     |                                     |")
+    print("\t     *-------------------------------------*")
     print()
     client_chos = input("ENTER YOUR CHOICE : ")
 
@@ -189,7 +190,6 @@ while True:
         break
     elif client_chos == "2" or "registration" == client_chos.lower():
         registration()
-        print()
         print("NOW YOU HAVE TO LOGIN !!! ")
         print()
         clientid = login()

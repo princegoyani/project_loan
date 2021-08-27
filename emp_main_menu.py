@@ -1,6 +1,6 @@
 # print(" 1.ADD NEW LOAN \n\n 2.CHECK CUSTOMER'S CURRENT LOAN \n\n 3.CHECK CUSTOMER'S TOTAL INSTALLMENTS \n\n 4.CHECK CUSTOMER'S TRANSACTIONS \n\n 5.CHECK CUSTOMER'S RATE OF INTEREST \n\n 6.CHECK CUSTOMER'S TOTAL LOAN AMOUNT  \n\n 7.CHECK CUSTOMER'S PAID AMOUNT OF CURRENT LOAN   \n\n 8.CHECK CUSTOMER'S UNPAID AMOUNT \n\n 9.CHECK CUSTOMER'S NEXT PAYMENT DATE \n\n 10.CHECK CUSTOMER'S LAST DATE FOR PAYING INSTALLMENT OF THIS MONTH \n\n 11.CHECK CUSTOMER'S TIME ALLOTED FOR LOAN COMPLETION (IN YEARS) \n")
 # print()
-from main import client_loans, get_data_status, move_tomainmenu, check_due
+from main import client_loans, get_data_status, move_tomainmenu, check_due, curr_format, verify_loan
 import pandas as pd
 import employ_login
 import os
@@ -10,22 +10,28 @@ pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 
-check_due()
-
-client_data = pd.read_csv("Client Database.csv",
-                          sep=",", header=0)
 while True:
     try:
-        print("PRESS Q TO RETURN TO MAIN MENU ANYWHERE IN THE PROGRAM !")
+        check_due()
+        client_data = pd.read_csv("Client Database.csv",
+                                  sep=",", header=0)
         print()
-        print("MAIN MENU \n""***********************************""\n* 1)VERIFY LOANS                  *\n* 2)CHECK CUSTOMER'S WAITING LOAN *\n* 3)CHECK CUSTOMER'S CURRENT LOAN *\n* 4)CHECK CUSTOMER'S EXPIRED LOAN *\n* 5)CUSTOMER'S TOTAL LOAN AMOUNT  *\n* 6)TOTAL DUE AMOUNT              *\n* 7)RECENT TRANSACTION            *\n* 8)CHECK CLIENT PERSONAL DETAILS *\n* 9)LOG OUT                       *\n""***********************************")
+        print("\t\t*-----------*-----------*---------*")
+        print("\t\t|\t    | MAIN MENU |         |")
+        print("\t\t|\t    *-----------*         |")
+        print("\t\t|\t                          |")
+        print("\t\t| 1)VERIFY LOANS                  |\n\t\t| 2)CHECK CUSTOMER'S WAITING LOAN |\n\t\t| 3)CHECK CUSTOMER'S CURRENT LOAN |\n\t\t| 4)CHECK CUSTOMER'S EXPIRED LOAN |\n\t\t| 5)CUSTOMER'S TOTAL LOAN AMOUNT  |\n\t\t| 6)TOTAL DUE AMOUNT              |\n\t\t| 7)RECENT TRANSACTION            |\n\t\t| 8)CHECK CLIENT PERSONAL DETAILS |\n\t\t| 9)LOG OUT                       |")
+        print("\t\t|\t                          |")
+        print("\t\t*---------------------------------*")
+        print("PRESS 'q' TO RETURN TO MAIN MENU ANYWHERE IN THE PROGRAM!")
+        print()
         print()
         ch = int(input("ENTER YOUR CHOICE : "))
         print()
 
         if ch == 1:
             print("1) VERFIY LOANS !!!")
-            exec(open("emp_check.py").read())
+            verify_loan()
             print()
 
         elif ch == 2:
@@ -73,8 +79,8 @@ while True:
                 print()
                 print(client_datas_ofstatus)
                 print()
-                print("TOTAL LOAN AMOUNT GRANTED IS : ", sum(
-                    client_datas_ofstatus.loc[:, "Loan_amount"]))
+                print("TOTAL LOAN AMOUNT GRANTED IS : ", curr_format(sum(
+                    client_datas_ofstatus.loc[:, "Loan_amount"])))
                 print()
 
         elif ch == 6:
@@ -100,12 +106,13 @@ while True:
                         client_data, client_id, "open")
                     # print(client_data_temp)
                     sum_due = sum(client_data_temp.loc[:, "Due_amount"])
-                    print("FOR CLIENT", client_id, " DUE AMOUNT IS ", sum_due)
+                    print("FOR CLIENT", client_id,
+                          " DUE AMOUNT IS ", curr_format(sum_due))
                     print()
                     total_due = total_due + sum_due
     #            print(client_ids_pre)
 
-            print("\n TOTAL DUE : ", total_due)
+            print("\nTOTAL DUE : ", curr_format(total_due))
 
         elif ch == 7:
             print("RECENT TRANSACTION : ")
@@ -128,14 +135,16 @@ while True:
             print()
             continue
 
-    except ChildProcessError:
-        print("Main Menu")
+    except ChildProcessError:  # used in q for returning to main menu
         print()
         continue
-
+    except ModuleNotFoundError:
+        print("INSTALL NECESSARY MODUALS !!! ")
+        print("REQUIRED MODUAL :- 1) PANDAS 2) MATHPOTLIB")
+        print()
+        break
     except:
         print("TRY AGAIN !!")
-        print()
         print("IF ANY PROBLEM CONTACT ADMIN")
         print()
         continue

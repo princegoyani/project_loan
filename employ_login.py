@@ -1,5 +1,6 @@
 import pandas as pd
 from getpass import getpass
+import os
 
 
 def login():
@@ -16,7 +17,7 @@ def login():
             i = 0
             while i < 5:
 
-                input_id = int(input("ENTER YOUR EMPLOY ID : "))
+                input_id = int(input("ENTER YOUR EMPLOYEE ID : "))
 
                 for index in loginid.index:
 
@@ -55,7 +56,7 @@ def login():
             else:
                 print()
                 print("TRY AGAIN LATER")
-                print()
+                os.abort()
             break
         except KeyError:
             print()
@@ -67,4 +68,9 @@ def login():
     return input_id
 
 
+print()
+print("***********************************")
+print("*    WELCOME TO EASY FINANCE      *")
+print("* ONLY FOR EMPLOY OF EASY FINANCE *")
+print("***********************************")
 empid = login()

@@ -31,29 +31,42 @@ def login():
                         loginid_client = loginid.loc[index]
                         # print(idindex)
 
+                        print()
                         print("ID is matched : ", dataid)
+                        print()
                         while True:
                             password = getpass("ENTER YOUR PASSWORD : ")
                             if str(password) == str(databas.loc[idindex, "Password"]):
-                                print("PASWORD MATCH")
+                                print()
+                                print("PASSWORD MATCH")
+                                print()
                                 # START FROM HERE
                                 break
                             else:
+                                print()
                                 print("Password Incorrect !!!!! ")
+                                print()
                                 continue
                         break
                 else:
+                    print()
                     print("INVALID ID !!!!! ")
+                    print()
                     print("TRY AGAIN - ")
+                    print()
                     i = i + 1
                     continue
                 break
 
             else:
+                print()
                 print("TRY AGAIN LATER")
+                print()
             break
         except ValueError:
+            print()
             print("TRY AGAIN !! ")
+            print()
             # while True:
             continue
 
@@ -88,12 +101,16 @@ def registration():
             first_name = input("Enter Your First Name : ").capitalize()
             last_name = input("Enter Your Last Name : ").capitalize()
             if len(first_name) <= 3 or len(last_name) <= 3:
+                print()
                 print("ENTER CORRECT NAME")
+                print()
                 continue
             contain_digit(first_name)
             contain_digit(last_name)
         except UnicodeError:
+            print()
             print("TRY AGAIN")
+            print()
             continue
         break
 
@@ -105,18 +122,22 @@ def registration():
             if len(str(mobile_number_check)) == 10:
 
                 if mobile_number_check in list(database.loc[:, "Mobile Number"]):
-                    print('ALREDY USED')
+                    print('ALREADY USED')
+                    print()
                     continue
                 else:
                     print("DONE ")
+                    print()
                     mobile_number = mobile_number_check
                     break
 
             else:
                 print("ENTER VALID ! ")
+                print()
                 continue
         except:
             print("ENTER VALID NUMBER ")
+            print()
             continue
 
     add = input("Enter Your Address : ")
@@ -132,19 +153,24 @@ def registration():
         password = input("ENTER PASSWORD :")
         if len(password) < 8:
             print("RETRY WITH MORE THEN 8 CHARACTERS !")
+            print()
             continue
         con_pass = input("CONFIRM PASSWORD :")
         if len(password) >= 8 and password == con_pass:
             # login page
-            print("THANKS FOR REGISTRATIOn")
+            print("THANKS FOR REGISTRATION")
+            print()
             login_database.loc[l_login_index] = [
                 client_id, acc_no, password]
             break
         else:
             print("TRY AGAIN !")
+            print()
             continue
     print("YOUR ACCOUNT NUMBER IS :", acc_no)
+    print()
     print(f"Your CLIENT ID IS : {client_id}")
+    print()
 
     database.to_csv('Client_Personal_Info.csv', index=False)
     login_database.to_csv('ClientLoginInfo.csv', index=False)
@@ -155,6 +181,7 @@ while True:
     print("******************")
     print("* 1)LOGIN        *\n* 2)Registration *")
     print("******************")
+    print()
     client_chos = input("ENTER YOUR CHOICE : ")
 
     if client_chos == "1" or "login" == client_chos.lower():
@@ -162,8 +189,11 @@ while True:
         break
     elif client_chos == "2" or "registration" == client_chos.lower():
         registration()
+        print()
         print("NOW YOU HAVE TO LOGIN !!! ")
+        print()
         clientid = login()
         break
     else:
         print("TRY AGAIN !")
+        print()

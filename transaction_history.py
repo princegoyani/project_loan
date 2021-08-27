@@ -28,7 +28,9 @@ trans_am = trans[1]
 
 
 print(trans_hist)
+print()
 print("YOUR TOTAL NO. OF PAID AMOUNT IS : ", trans_am)
+print()
 
 
 """    while True:

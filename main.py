@@ -10,19 +10,37 @@ pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 
 
+def check_due():
+    client_data = pd.read_csv("Client Database.csv", sep=",", header=0)
+    for index in client_data.index:
+        client_id = client_data.loc[index, "Client ID"]
+        emi = client_data.loc[index, "EMI"]
+        due_date = client_data.loc[index, "Due_date"]
+        due_amount_ini = client_data.loc[index, "Due_amount"]
+        due_amount = due_amount_cal(due_date, emi, due_amount_ini)
+        client_data.loc[index, "Due_amount"] = due_amount
+
+    client_data.to_csv("Client Database.csv", index=False)
+
+
 def due_Date_cal(due_date_ini, Starting_date):
     Starting_date = datetime.date.fromisoformat(str(Starting_date))
 
     due_date_ini = datetime.date.fromisoformat(str(due_date_ini))
 
     if datetime.date.today() > due_date_ini:
-        due_months = (datetime.date.today().year - due_date_ini.year) * \
-            12 + (datetime.date.today().month - due_date_ini.month) + 1
+        diff = relativedelta(datetime.date.today(), due_date_ini)
+        due_months = diff.years * 12 + diff.months + 1
+        if datetime.date.today().day == due_date_ini.day:
+            due_months = due_months - 1
 
+        """due_months = (datetime.date.today().year - due_date_ini.year) * \
+            12 + (datetime.date.today().month - due_date_ini.month) + 1
+        """
     else:
         due_months = 0
 
-    #due_date = due_date_ini + relativedelta(months=due_months)
+    # due_date = due_date_ini + relativedelta(months=due_months)
 
     return due_months
 
@@ -51,19 +69,21 @@ def due_amount_cal(due_date, emi, due_amount_ini):
 
     if str(due_date) == "0":
         print("LOAN IS WAITING")
+        print()
         due_amount = 0
 
-    #due_months = due_Date_cal()
-
+    # due_months = due_Date_cal()
     else:
         due_date = datetime.date.fromisoformat(str(due_date))
         if datetime.date.today() > due_date:
-            due_months = (datetime.date.today().year - due_date.year) * \
-                12 + (datetime.date.today().month -
-                      due_date.month)  # +1 as before it return months difference between due date and today but a month before due date also need to included
-
+            diff = relativedelta(datetime.date.today(), due_date)
+            due_months = diff.years * 12 + diff.months
+            # +1 as before it return months difference between due date and today but a month before due date also need to included
             # due amount are punishment so it not just adding emi also the amount before a month
-            due_amount = emi * (due_months+1)
+            if datetime.date.today().day == due_date.day:
+                due_amount = emi * (due_months)
+            else:
+                due_amount = emi * (due_months + 1)
             # print(due_months)
         else:
             due_amount = due_amount_ini
@@ -80,6 +100,7 @@ def Check_loan():             # checking loan_data
         # print("BAL_OUT", balance_out <= 0)
         if balance_out <= 0 and "open" == client_data.loc[i, "Status"].lower():
             client_data.loc[i, "Status"] = "expired"
+            client_data.loc[i, "Balance_out"] = 0
 
     client_data.to_csv("Client Database.csv", index=False)
 
@@ -141,7 +162,9 @@ def move_tomainmenu(inp, menu):
                 break
 
             else:
+                print()
                 print("\nTRY AGAIN !")
+                print()
                 continue
         # print(error)
 
@@ -163,7 +186,7 @@ def get_data_status(client_data, status):
 def client_loans(client_data, clientid, Status):  # for client to get there loan_info
 
     client_loan_data = pd.DataFrame(
-        columns=["Loan_id", "Loan", "Rate", "Total Principal", "Total Interest", "Loan_Amount", "Time", "Bal_Out", "EMI", "Due_date", "Due_amount", "NO_ofPayment", "Start_Date", "Status"])
+        columns=["Loan_id", "Type of Loan", "Rate", "Loan_Amount", "Time", "Bal_Out", "EMI", "Due_date", "Due_amount", "Last Transaction Date", "NO_ofPayment", "Start_Date", "Status"])
     # print(client_loan_data)
     # print(client_data)
     # print(clientid in client_data["Client ID"].tolist())
@@ -187,18 +210,17 @@ def client_loans(client_data, clientid, Status):  # for client to get there loan
             typeofloan = client_data.loc[index1, "Types of Loans"]
             loan_amount = client_data.loc[index1, "Loan_amount"]
             rate = client_data.loc[index1, "Rate of Intrest"]
-            principal = client_data.loc[index1, "Loan_amount"]
-            san_amount = client_data.loc[index1, "Sanctioned Amount"]
-            time = client_data.loc[index1, "for YEAR"]
+            time = client_data.loc[index1, "Time"]
             balance_out = client_data.loc[index1, "Balance_out"]
             emi = client_data.loc[index1, "EMI"]
-            principal = client_data.loc[index1, "Total_Principal"]
-            interest = client_data.loc[index1, "Total_Interest"]
+            """principal = client_data.loc[index1, "Monthly_Principal"]
+            interest = client_data.loc[index1, "Monthly_Interest"]"""
             no_oftrans = client_data.loc[index1, "No_ofTransaction"]
             starting_date = client_data.loc[index1, "Starting_date"]
             due_date_ini = client_data.loc[index1, "Due_date"]
             due_amount_ini = client_data.loc[index1, "Due_amount"]
             status_client = client_data.loc[index1, "Status"]
+            last_dateoftrans = client_data.loc[index1, "Last Transaction Date"]
             # print(due_date_ini)
             # print(starting_date)
             """if due_amount_ini == 0:
@@ -215,7 +237,7 @@ def client_loans(client_data, clientid, Status):  # for client to get there loan
                 due_amount = due_amount_cal(due_date, emi, due_amount_ini)
                 # print(due_date)
             client_loan_data.loc[i] = [loan_id, typeofloan, rate,
-                                       principal, interest, loan_amount, time, balance_out, emi, due_date, due_amount, no_oftrans, starting_date, status_client]
+                                       loan_amount, time, balance_out, emi, due_date, due_amount, last_dateoftrans, no_oftrans, starting_date, status_client]
 
             i = i + 1
 
@@ -248,13 +270,13 @@ def transaction(client_id):
 
     trans_hist = pd.DataFrame(columns=trans_data.columns)
     trans_amount = 0
+    last_index = 1
     for index in trans_data.index:
-
-        last_index = len(trans_hist.index)
         if client_id == trans_data.loc[index, "Client ID"]:
             trans_hist.loc[last_index] = trans_data.loc[index, :]
             trans_amount = trans_amount + \
                 trans_hist.loc[last_index, "Transaction_Amount"]
+            last_index = last_index + 1
           #  last_index = len(trans_data.index)
 
     return trans_hist, trans_amount

@@ -17,15 +17,18 @@ while a == 0:
         if ch == 1:
 
             print("NEW LOAN IS LOADING")
+            print()
             # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
             exec(open("new_loan.py").read())
             continue
         elif ch == 2:
             print("NO OF LOANS IS")
+            print()
             exec(open("no_of_loans.py").read())
             continue
         elif ch == 3:
-            print("YOUR PREVIOUS TRANSACTION IS ")
+            print("YOUR PREVIOUS TRANSACTION ")
+            print()
 
             # exec(open("transaction_history.py").read())
             trans = transaction(clientid)
@@ -34,40 +37,52 @@ while a == 0:
 
             if len(trans_hist) == 0:
                 print("NO PAYMENT TILL !!!")
+                print()
             else:
                 print(trans_hist)
                 print("YOUR TOTAL NO. OF PAID AMOUNT IS : ", trans_am)
+                print()
 
             continue
         elif ch == 4:
 
             print("Pay Now !")
+            print()
             exec(open("pay_now.py").read())
             continue
 
         elif ch == 5:
             print("PAYMENT SCHEDULE")
+            print()
             exec(open("pay_shcd.py").read())
             continue
         elif ch == 6:
-            print("LOGING OUT .....")
+            print("LOGGING OUT .....")
+            print()
             print("Thank you For Visting !")
+            print()
             # KeyError
             raise ZeroDivisionError
 
         else:
-            print("PLZ REENTER YOUR CHOICE !!!")
+            print("PLEASE RE ENTER YOUR CHOICE !!!")
+            print()
             continue
     except ZeroDivisionError:
         print("LOG OUT !")
+        print()
         os.abort()
         break
     except ChildProcessError:
         print("MAIN MENU")
+        print()
         continue
     except:
-        print("INVALID !!!")
+
+        print("INVALID!!!")
+        print()
         print(" IF ANY PROMBLEM PLEASE CONTACT BANK !!! ")
+        print()
         continue
 
 """

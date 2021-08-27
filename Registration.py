@@ -33,11 +33,13 @@ while True:
         last_name = input("Enter Your Last Name : ").capitalize()
         if len(first_name) <= 3 or len(last_name) <= 3:
             print("ENTER CORRECT NAME")
+            print()
             continue
         contain_digit(first_name)
         contain_digit(last_name)
     except UnicodeError:
         print("TRY AGAIN")
+        print()
         continue
     break
 
@@ -50,19 +52,23 @@ while True:
         if len(str(mobile_number_check)) == 10:
             for q in database["Mobile Number"]:
                 if q == mobile_number_check:
-                    print('ALREDY USED')
+                    print('ALREADY USED')
+                    print()
                     continue
                 else:
                     print("DONE ")
+                    print()
                     mobile_number = mobile_number_check
                 break
             break
 
         else:
             print("ENTER VALID NUMBER !")
+            print()
             continue
     except KeyError:
         print("ENTER VALID NUMBER ")
+        print()
         continue
 
 add = input("Enter Your Address : ")
@@ -78,18 +84,22 @@ while True:
     password = input("ENTER PASSWORD :")
     if len(password) < 8:
         print("RETRY WITH MORE THEN 8 CHARACTERS !")
+        print()
         continue
     con_pass = input("CONFIRM PASSWORD :")
     if len(password) >= 8 and password == con_pass:
         # login page
-        print("THANKS FOR REGISTRATIOn")
+        print("THANKS FOR REGISTRATION")
+        print()
         login_database.loc[l_login_index] = [client_id, acc_no, password]
         break
     else:
         print("TRY AGAIN !")
         continue
-print("YOUR ACCOUNT NUMBER IS :", acc_no)
+print("YOUR ACCOUNT NUMBER IS : ", acc_no)
+print()
 print(f"Your CLIENT ID IS : {client_id}")
+print()
 
 
 database.to_csv('Client_Personal_Info.csv', index=False)

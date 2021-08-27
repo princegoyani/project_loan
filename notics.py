@@ -13,7 +13,7 @@ client_loan = client_loans(client_data, clientid, "open")
 client_loan_data = client_loan
 
 today = datetime.date.today()
-loan_ids = []
+loan_ids = 0
 total_due = 0
 # a = input()
 for i in client_loan_data.index:
@@ -24,24 +24,24 @@ for i in client_loan_data.index:
         continue
     due_Date = datetime.date.fromisoformat(due_Date)
     if today > due_Date:
-        loan_ids.append(client_loan_data.loc[i, "Loan_id"])
-        total_due = total_due + client_loan_data.loc[i, "Due_amount"]
+        loan_ids = client_loan_data.loc[i, "Loan_id"]
+        total_due = client_loan_data.loc[i, "Due_amount"]
         print("*******************************************************************************")
         print(
-            f"NOTE !!!! DUE DATE MISSED FOR LOAN {loan_ids}  ! DUE AMOUNT IS {total_due} !!!    *")
+            f"NOTE !!!! DUE DATE MISSED FOR LOAN {loan_ids}  ! DUE AMOUNT IS {total_due} !!!    ")
         print("*******************************************************************************")
     elif today == due_Date:
-        loan_ids.append(client_loan_data.loc[i, "Loan_id"])
-        total_due = total_due + client_loan_data.loc[i, "Due_amount"]
+        loan_ids = client_loan_data.loc[i, "Loan_id"]
+        total_due = client_loan_data.loc[i, "Due_amount"]
         print("*******************************************************************************")
         print(
-            f"NOTE !!!!! DUE DATE FOR LOAN {loan_ids} IS TODAY ! DUE AMOUNT IS {total_due} !!!    *")
+            f"NOTE !!!!! DUE DATE FOR LOAN {loan_ids} IS TODAY ! DUE AMOUNT IS {total_due} !!!  ")
         print("*******************************************************************************")
     elif today >= due_Date - relativedelta(days=10):
-        loan_ids.append(client_loan_data.loc[i, "Loan_id"])
+        loan_ids = client_loan_data.loc[i, "Loan_id"]
         print("*******************************************************************************")
         print(
-            f"NOTE !!!!!!!! DUE DATE FOR LOAN {loan_ids} IS NEAR ! DUE DATE IS {due_Date} !!!    *")
+            f"NOTE !!!!!!!! DUE DATE FOR LOAN {loan_ids} IS NEAR ! DUE DATE IS {due_Date} !!!")
         print("*******************************************************************************")
     else:
         pass

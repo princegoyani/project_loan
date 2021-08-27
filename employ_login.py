@@ -3,7 +3,6 @@ from getpass import getpass
 
 
 def login():
-
     while True:
         try:
 
@@ -26,29 +25,42 @@ def login():
                     if int(loginid[index]) == input_id:
                         idindex = index
                         # print(idindex)
+                        print()
                         print("ID is matched : ", input_id)
+                        print()
                         while True:
                             password = getpass("ENTER YOUR PASSWORD : ")
                             if str(password) == str(databas.loc[index, "Password"]):
-                                print("PASWORD MATCH")
+                                print()
+                                print("PASSWORD MATCH")
+                                print()
                                 # START FROM HERE
                                 break
                             else:
+                                print()
                                 print("Password Incorrect !!!!! ")
+                                print()
                                 continue
                         break
                 else:
+                    print()
                     print("INVALID ID !!!!! ")
+                    print()
                     print("TRY AGAIN - ")
+                    print()
                     i = i + 1
                     continue
                 break
 
             else:
+                print()
                 print("TRY AGAIN LATER")
+                print()
             break
         except KeyError:
+            print()
             print("TRY AGAIN !! ")
+            print()
             # while True:
             continue
 

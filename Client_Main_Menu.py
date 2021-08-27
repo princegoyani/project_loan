@@ -89,9 +89,11 @@ while a == 0:
     except ModuleNotFoundError:
         print("INSTALL NECESSARY MODUALS !!! ")
         print("REQUIRED MODUAL :- 1) PANDAS 2) MATHPOTLIB")
+        print("Restart after installing this moduals")
+        ex = input("Press any !")
         break
-    except:
 
+    except:
         print("INVALID!!!")
         print()
         print(" IF ANY PROMBLEM PLEASE CONTACT BANK !!! ")

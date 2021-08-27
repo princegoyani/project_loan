@@ -1,8 +1,6 @@
-# print(" 1.ADD NEW LOAN \n\n 2.CHECK CUSTOMER'S CURRENT LOAN \n\n 3.CHECK CUSTOMER'S TOTAL INSTALLMENTS \n\n 4.CHECK CUSTOMER'S TRANSACTIONS \n\n 5.CHECK CUSTOMER'S RATE OF INTEREST \n\n 6.CHECK CUSTOMER'S TOTAL LOAN AMOUNT  \n\n 7.CHECK CUSTOMER'S PAID AMOUNT OF CURRENT LOAN   \n\n 8.CHECK CUSTOMER'S UNPAID AMOUNT \n\n 9.CHECK CUSTOMER'S NEXT PAYMENT DATE \n\n 10.CHECK CUSTOMER'S LAST DATE FOR PAYING INSTALLMENT OF THIS MONTH \n\n 11.CHECK CUSTOMER'S TIME ALLOTED FOR LOAN COMPLETION (IN YEARS) \n")
-# print()
-from main import client_loans, get_data_status, move_tomainmenu, check_due, curr_format, verify_loan
-import pandas as pd
 import employ_login
+import pandas as pd
+from main import client_loans, get_data_status, move_tomainmenu, check_due, curr_format, verify_loan
 import os
 
 pd.set_option('display.max_rows', None)

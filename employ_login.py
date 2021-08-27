@@ -20,7 +20,6 @@ def login():
                 input_id = int(input("ENTER YOUR EMPLOYEE ID : "))
 
                 for index in loginid.index:
-
                     #print(dataid, type(dataid))
                     #print(dataid == input_id)
                     if int(loginid[index]) == input_id:

@@ -235,6 +235,7 @@ def due_Date_cal(Loan_amount, bal_out, emi, no_oftrans, Starting_date):
 def move_tomainmenu(inp, menu):
     if inp.lower() == "q":
         while True:
+
             confirm = input(
                 "Are you sure you want to go to MAIN MENU (YES/NO) : ")
             if confirm.lower() == "yes" or confirm.lower() == "y":
@@ -323,11 +324,11 @@ def client_loans(client_data, clientid, Status):  # for client to get there loan
 
             i = i + 1
 
-        # print(len(client_loan_data))
+    return client_loan_data
+    # print(len(client_loan_data))
     """if len(client_loan_data) == 0:
         print("NO LOAN AMOUNT OUT STANDING")
     """
-    return client_loan_data
 
     """
             # print("WELCOME")
@@ -678,19 +679,13 @@ def make_transaction(client_id, typeofloan, emi, loan_id, due_amount):
 
 
 def pay_now(clientid):
-
     Check_loan()
     client_data = pd.read_csv("Client Database.csv",
                               sep=",", header=0)
-
     # print(client_data["Client ID"])
-
     client_loan_data = client_loans(client_data, clientid, "open")
-
     # print(len(client_loan))
-
     # client_loan_data = client_loan
-
     if len(client_loan_data) == 0:
         print()
         print("NO LOAN AMOUNT OUT STANDING")
@@ -952,13 +947,13 @@ def pay_shcd(clientid):
                     loan_transaction.loc[ch_trans, :] = [
                         round(bal_out), round(principal), round(month_int), round(ch_emi), due_date]
                     ch_trans = ch_trans + 1
-                    # if len(loan_transaction.index) == 0:
+                break
+                # if len(loan_transaction.index) == 0:
             #       last_index = 1
             #  else:
             #     last_index = len(client_loan_data.index) + 1
 
             #  print(last_index)
-                break
 
         print(loan_transaction)
         print()

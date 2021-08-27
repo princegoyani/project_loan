@@ -1,10 +1,10 @@
-"""import pandas as pd
+from numpy.lib.function_base import _quantile_is_valid
+import pandas as pd
 from datetime import date
 from login import clientid
 from main import monthly_pay_int, move_tomainmenu
 #from pay_now import due_Date_cal
 from dateutil.relativedelta import relativedelta
-"""
 
 
 def get_loan_amount():
@@ -16,8 +16,8 @@ def get_loan_amount():
             if loan_amount < 10000:
                 print("AMOUNT MUST BE GREATER THEN 10 Thousand ")
                 continue
-            elif loan_amount > 10000000:
-                print("AMOUNT MUST BE Less then 10 Cr. ")
+            elif loan_amount > 50000000:
+                print("AMOUNT MUST BE Less then 5 Cr. ")
                 continue
         except ValueError:
             print("Try Again")
@@ -31,8 +31,7 @@ def get_loan_amount():
 
 def typeofloans():
     while True:
-        typeofloan = input(
-            "Types of loan :- \n1)Education Loan \n2)Personal Loan \n3)Home Loan \n4)Vechical Loan \n5)Bussiness loan \n6)Aggriculture Loan \nEnter Which Type of Loan You want : ")
+        typeofloan = input("Types of loan :- \n""***********************""\n* 1)Education Loan    *\n* 2)Personal Loan     *\n* 3)Home Loan         *\n* 4)Vehicle Loan      *\n* 5)Bussiness loan    *\n* 6)Aggriculture Loan *\n""***********************""\nEnter Which Type of Loan You want : ")
         move_tomainmenu(typeofloan, "client")
         if (typeofloan == "1") or ("education" in typeofloan.lower()):
             print("1) Education Loan")
@@ -40,25 +39,25 @@ def typeofloans():
             int_rate = 3
 
         elif (typeofloan == "2") or ("personal" in typeofloan.lower()):
-            print("2 ) Personal loan")
+            print("2) Personal loan")
             typeofloan = "Personal loan"
             int_rate = 8
 
         elif (typeofloan == "3") or ("home" in typeofloan.lower()):
-            print("3 ) home loan")
+            print("3) Home loan")
             typeofloan = "Home loan"
             int_rate = 6
 
         elif (typeofloan == "4") or ("vechical" in typeofloan.lower()):
-            print("4 ) Vechical loan")
+            print("4) Vechical loan")
             typeofloan = "Vechical loan"
             int_rate = 4.5
         elif (typeofloan == "5") or ("bussiness" in typeofloan.lower()):
-            print("5 ) Bussiness loan")
+            print("5) Bussiness loan")
             typeofloan = "Bussiness loan"
             int_rate = 9
         elif (typeofloan == "6") or ("aggriculture" in typeofloan.lower()):
-            print("6 ) Aggriculture loan")
+            print("6) Aggriculture loan")
             typeofloan = "Aggriculture loan"
             int_rate = 2.5
         else:
@@ -86,7 +85,7 @@ def get_time():
     # its limit will be decide by creadit scroce
     while True:
         try:
-            fortime = input("Enter For How Much Time in Year: ")
+            fortime = input("Enter For How Much Time(\"in Year\") : ")
             move_tomainmenu(fortime, "client")
             fortime = int(fortime)
             if fortime > 10 or fortime < 0:
@@ -108,7 +107,7 @@ def agaist_mortage(loan_amount):
     while True:
         try:
             mortage = input(
-                "Agaist Mortgage of (\"It must Be 25 % more than Amount of loan you want \") : ")
+                "Against Mortgage of (\"It must Be 25 % more than Amount of loan you want \") : ")
             move_tomainmenu(mortage, "client")
             mortage = int(mortage)
 
@@ -121,7 +120,7 @@ def agaist_mortage(loan_amount):
             else:
                 print("Its Prefect ! ")
 
-        except ValueError:
+        except:
             print("Invalid Input ! ")
             print("Try Again")
             continue
@@ -168,7 +167,7 @@ def add_toCSV(clientid, loan_amount, time, typeofloan, int_rate, monthly_pay, mo
 
     client_data.to_csv(path_or_buf="Client Database.csv",
                        sep=",", index=False, mode="w")
-    print("LOAN IS APPLIED FOR APPROVAL ! ONCE VERIFIED YOU WILL BE NOTICEFY")
+    print("LOAN IS APPLIED FOR APPROVAL ! ONCE VERIFIED YOU WILL BE NOTIFY")
 
 
 while True:
@@ -194,7 +193,7 @@ while True:
 
     ending_date = date.today() + relativedelta(years=time)
     print("Total Interest Amount will be : ", rou_interest_amount)
-    print(" last date of loan completion will be nearly :", ending_date)
+    print("Last date of loan completion will be nearly :", ending_date)
 
     print("EMI will be :", rou_moth_pay)
     print("Total Payment will be : ", rou_total_pay)
@@ -209,8 +208,8 @@ while True:
                 confirm = input("\nWant To Continue (YES or NO):")
                 move_tomainmenu(confirm, "client")
                 if confirm.lower() == "yes" or confirm.lower() == "y":
-                    add_toCSV(clientid, round(loan_amount, 3), time,
-                              typeofloan, round(int_rate, 3), rou_moth_pay, aga_mortage)
+                    add_toCSV(clientid, round(loan_amount), time,
+                              typeofloan, int_rate, rou_moth_pay, aga_mortage)
                     print("Thank You !")
                     # main mane
                 elif confirm.lower() == "no" or confirm.lower() == "n":

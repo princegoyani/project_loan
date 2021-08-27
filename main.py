@@ -1,8 +1,6 @@
 from os import error, read
 import pandas as pd
-import os
-from login import clientid
-import random
+
 import math
 import datetime
 from dateutil.relativedelta import relativedelta
@@ -12,184 +10,6 @@ pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 
 
-def main_menu():
-    a = 0
-    while a == 0:
-        Check_loan()
-        try:
-            notics()
-            print("PRESS 'q' TO RETURN TO MAIN MENU ANYWHERE IN THE PROGRAM !")
-            print("*******************************")
-            print("* 1.NEW LOAN                  *\n* 2.NO OF LOAN IS             *\n* 3.PREVIOUS TRANSACTION      *\n* 4.PAY YOUR CURRENT LOAN     *\n* 5.PAYMENT SCHEDULE FOR LOAN *\n* 6)LOGOUT                    *")
-            print("*******************************")
-            ch = int(input("ENTER YOUR CHOICE:"))
-
-            if ch == 1:
-
-                print("NEW LOAN IS LOADING")
-                # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-                new_loan()
-                continue
-            elif ch == 2:
-                print("NO OF LOANS IS")
-                # os.system("no_of_loans.py")
-                no_of_loans()
-                continue
-            elif ch == 3:
-                print("YOUR PREVIOUS TRANSACTION IS ")
-
-                # exec(open("transaction_history.py").read())
-                trans = transaction(clientid)
-                trans_hist = trans[0]
-                trans_am = trans[1]
-
-                if len(trans_hist) == 0:
-                    print("NO PAYMENT TILL !!!")
-                else:
-                    print(trans_hist)
-                    print("YOUR TOTAL NO. OF PAID AMOUNT IS : ", trans_am)
-
-                continue
-            elif ch == 4:
-
-                print("Pay Now !")
-                pay_now()
-                continue
-
-            elif ch == 5:
-                print("PAYMENT SCHEDULE")
-                pay_shcd()
-                continue
-            elif ch == 6:
-                print("LOGING OUT .....")
-                print("Thank you For Visting !")
-                # KeyError
-                raise ZeroDivisionError
-
-            else:
-                print("PLZ REENTER YOUR CHOICE !!!")
-                continue
-        except ZeroDivisionError:
-            print("LOG OUT !")
-            os.abort()
-            break
-
-        except ValueError:
-            print("INVALID !!!")
-            print(" IF ANY PROMBLEM PLEASE CONTACT BANK !!! ")
-            continue
-
-
-def pay_now():
-    try:
-        exec(open("pay_now.py").read())
-    except KeyboardInterrupt:
-        pass
-
-
-def new_loan():
-    try:
-        exec(open("new_loan.py").read())
-    except KeyboardInterrupt:
-        print("MAIN MENU ")
-
-
-def pay_shcd():
-    try:
-        exec(open("pay_shcd.py").read())
-    except KeyboardInterrupt:
-        pass
-
-
-def no_of_loans():
-
-    from main import client_loans, move_tomainmenu, Check_loan
-
-    print("1.ALL LOANS \n\n2.CURRENT LOAN \n\n3.WAITING LOAN \n\n4.EXPIRE LOAN")
-    while True:
-
-        ch = input("ENTER YOUR CHOICE:")
-        move_tomainmenu(ch, "client")
-        if ch == '1':
-            status_client = ["open", "waiting", "expired"]
-
-        elif ch == '2':
-            status_client = ["open"]
-
-        elif ch == '3':
-            status_client = ["waiting"]
-
-        elif ch == '4':
-            status_client = ["expired"]
-
-        else:
-            print("PLEASE RE ENTER YOUR CHOICE")
-            continue
-        break
-
-    Check_loan()
-    client_data = pd.read_csv("Client Database.csv",
-                              sep=",", header=0)
-
-    client_loan = client_loans(client_data, clientid, status_client)
-    if len(client_loan) == 0:
-        print("NO LOAN AMOUNT OUT STANDING")
-    else:
-        print(client_loan)
-
-
-def notics():
-
-    Check_loan()
-
-    client_data = pd.read_csv("Client Database.csv",
-                              sep=",", header=0)
-
-    client_loan = client_loans(client_data, clientid, "open")
-    # print(len(client_loan))
-    client_loan_data = client_loan
-
-    today = datetime.date.today()
-    loan_ids = []
-    total_due = 0
-    # a = input()
-    for i in client_loan_data.index:
-        due_Date = client_loan_data.loc[i, "Due_date"]
-
-        # print("due date", due_Date)
-        if due_Date == "0":
-            continue
-        due_Date = datetime.date.fromisoformat(due_Date)
-        if today > due_Date:
-            loan_ids.append(client_loan_data.loc[i, "Loan_id"])
-            total_due = total_due + client_loan_data.loc[i, "Due_amount"]
-            print(
-                "*******************************************************************************")
-            print(
-                f"NOTE !!!! DUE DATE MISSED FOR LOAN {loan_ids}  ! DUE AMOUNT IS {total_due} !!!    *")
-            print(
-                "*******************************************************************************")
-        elif today == due_Date:
-            loan_ids.append(client_loan_data.loc[i, "Loan_id"])
-            total_due = total_due + client_loan_data.loc[i, "Due_amount"]
-            print(
-                "*******************************************************************************")
-            print(
-                f"NOTE !!!!! DUE DATE FOR LOAN {loan_ids} IS TODAY ! DUE AMOUNT IS {total_due} !!!    *")
-            print(
-                "*******************************************************************************")
-        elif today >= due_Date - relativedelta(days=10):
-            loan_ids.append(client_loan_data.loc[i, "Loan_id"])
-            print(
-                "*******************************************************************************")
-            print(
-                f"NOTE !!!!!!!! DUE DATE FOR LOAN {loan_ids} IS NEAR ! DUE DATE IS {due_Date} !!!    *")
-            print(
-                "*******************************************************************************")
-        else:
-            pass
-
-
 def due_Date_cal(due_date_ini, Starting_date):
     Starting_date = datetime.date.fromisoformat(str(Starting_date))
 
@@ -197,8 +17,7 @@ def due_Date_cal(due_date_ini, Starting_date):
 
     if datetime.date.today() > due_date_ini:
         due_months = (datetime.date.today().year - due_date_ini.year) * \
-            12 + (datetime.date.today().month - due_date_ini.month) + \
-            1  # due date is a date before a month must be paid
+            12 + (datetime.date.today().month - due_date_ini.month) + 1
 
     else:
         due_months = 0
@@ -245,7 +64,7 @@ def due_amount_cal(due_date, emi, due_amount_ini):
 
             # due amount are punishment so it not just adding emi also the amount before a month
             due_amount = emi * (due_months+1)
-            print(due_months)
+            # print(due_months)
         else:
             due_amount = due_amount_ini
 
@@ -260,7 +79,6 @@ def Check_loan():             # checking loan_data
         balance_out = client_data.loc[i, "Balance_out"]
         # print("BAL_OUT", balance_out <= 0)
         if balance_out <= 0 and "open" == client_data.loc[i, "Status"].lower():
-            client_data.loc[i, "Balance_out"] = 0
             client_data.loc[i, "Status"] = "expired"
 
     client_data.to_csv("Client Database.csv", index=False)
@@ -317,7 +135,7 @@ def move_tomainmenu(inp, menu):
             confirm = input(
                 "Are you sure you want to go to MAIN MENU (YES/NO):")
             if confirm.lower() == "yes" or confirm.lower() == "y":
-                raise KeyboardInterrupt
+                raise ChildProcessError
 
             elif confirm.lower() == "no" or confirm.lower() == "n":
                 break
@@ -325,8 +143,7 @@ def move_tomainmenu(inp, menu):
             else:
                 print("\nTRY AGAIN !")
                 continue
-
-    # print(error)
+        # print(error)
 
 
 def get_data_status(client_data, status):
@@ -339,8 +156,8 @@ def get_data_status(client_data, status):
             client_datas_ofstatus.loc[row] = client_data.loc[i, :]
             row = row + 1
 
-    # print(client_datas_ofstatus)
     return client_datas_ofstatus
+    # print(client_datas_ofstatus)
 
 
 def client_loans(client_data, clientid, Status):  # for client to get there loan_info
@@ -398,7 +215,7 @@ def client_loans(client_data, clientid, Status):  # for client to get there loan
                 due_amount = due_amount_cal(due_date, emi, due_amount_ini)
                 # print(due_date)
             client_loan_data.loc[i] = [loan_id, typeofloan, rate,
-                                       round(principal), round(interest), loan_amount, time, round(balance_out), round(emi), due_date, due_amount, no_oftrans, starting_date, status_client]
+                                       principal, interest, loan_amount, time, balance_out, emi, due_date, due_amount, no_oftrans, starting_date, status_client]
 
             i = i + 1
 
@@ -443,4 +260,15 @@ def transaction(client_id):
     return trans_hist, trans_amount
 
 
-main_menu()
+def bal_calculater(loan_amount, rate, time, months):
+
+    rate_formated = rate / 100 / 12
+   # months = time * 12
+  #  print(months)
+  #  print(emi)
+    a = math.pow((1 + rate_formated), time * 12)
+    b = a - 1
+    bal_amount = loan_amount * (a - math.pow((1 + rate_formated), months)) / b
+    # print(bal_amount)
+
+    return bal_amount

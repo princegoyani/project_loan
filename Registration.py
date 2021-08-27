@@ -1,10 +1,24 @@
+from numpy.core.numeric import True_
 import pandas as pd
 import random
 
-database = pd.read_csv("Client_Personal_Info.csv", sep=",", header=0)
+from pandas.core.base import DataError
 
-l_index = database.tail(1).index[0]
+database = pd.read_csv("Client_Personal_Info.csv", sep=",", header=0)
+print(len(database))
+if len(database) == 0:
+    l_index = 0
+else:
+    l_index = database.tail(1).index[0]
 last_client_id = database.loc[l_index, "Client ID"]
+
+
+def contain_digit(str):
+    for i in str:
+        if i.isdigit() == True:
+            raise UnicodeError
+
+
 while True:
     acc_no_check = random.randrange(11111111, 99999999, 1)
     for p in database["ACCOUNT No"]:
@@ -13,13 +27,27 @@ while True:
     acc_no = acc_no_check
     break
 
+while True:
+    try:
+        first_name = input("Enter Your First Name : ").capitalize()
+        last_name = input("Enter Your Last Name : ").capitalize()
+        if len(first_name) <= 3 or len(last_name) <= 3:
+            print("ENTER CORRECT NAME")
+            continue
+        contain_digit(first_name)
+        contain_digit(last_name)
+    except UnicodeError:
+        print("TRY AGAIN")
+        continue
+    break
 
-cust_name = input("Enter Your Full Name : ")
+cust_name = first_name + " " + last_name
+
 
 while True:
-    mobile_number_check = int(input("Enter Your Mobile Number : "))
     try:
-        if len(mobile_number_check) == 10:
+        mobile_number_check = int(input("Enter Your Mobile Number : "))
+        if len(str(mobile_number_check)) == 10:
             for q in database["Mobile Number"]:
                 if q == mobile_number_check:
                     print('ALREDY USED')
@@ -31,9 +59,9 @@ while True:
             break
 
         else:
-            print("ENTER VALID NUMBER ")
+            print("ENTER VALID NUMBER !")
             continue
-    except:
+    except KeyError:
         print("ENTER VALID NUMBER ")
         continue
 
@@ -55,15 +83,15 @@ while True:
     if len(password) >= 8 and password == con_pass:
         # login page
         print("THANKS FOR REGISTRATIOn")
-        login_database.loc[l_login_index] = [client_id, password]
+        login_database.loc[l_login_index] = [client_id, acc_no, password]
         break
     else:
         print("TRY AGAIN !")
         continue
-
+print("YOUR ACCOUNT NUMBER IS :", acc_no)
 print(f"Your CLIENT ID IS : {client_id}")
 
-database.to_csv('Client_Personal_Info.csv', index=False)
 
+database.to_csv('Client_Personal_Info.csv', index=False)
 
 # print(database)

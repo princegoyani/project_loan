@@ -1,14 +1,16 @@
 import datetime
-a = int("$2323")
+a = datetime.date.fromisoformat("2022-06-07")
+print(a > datetime.date.today())
 
 
 """
-#print(datetime.datetime.strptime("2008-04-04", "%y-%m-%d"))
-Starting_date = datetime.date.fromisoformat("2021-09-25")
-print(datetime.date.today().year)
-due_months = (datetime.date.today().year - Starting_date.year) * \
-    12 + (datetime.date.today().month - Starting_date.month)
-print(due_months)"""
+#
+# print(datetime.datetime.strptime("2008-04-04", "%y-%m-%d"))
+print(a.month)
+print((datetime.date.today().year - a.year)*12 +
+      (datetime.date.today().month - a.month))
+"""
+
 """import pandas as pd
 
 client_data = pd.read_csv("Client Database.csv",

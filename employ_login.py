@@ -17,7 +17,7 @@ def login():
             i = 0
             while i < 5:
 
-                input_id = int(input("ENTER YOUR EMP ID :"))
+                input_id = int(input("ENTER YOUR EMPLOY ID : "))
 
                 for index in loginid.index:
 

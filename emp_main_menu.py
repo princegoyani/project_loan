@@ -11,46 +11,61 @@ pd.set_option('display.width', None)
 pd.set_option('display.max_colwidth', None)
 
 
-client_data = pd.read_csv("Client Database.csv",
-                          sep=",", header=0)
-
 while True:
     try:
+        client_data = pd.read_csv("Client Database.csv",
+                                  sep=",", header=0)
         print("PRESS Q TO RETURN TO MAIN MENU ANYWHERE IN THE PROGRAM !")
-        print("MAIN MENU \n1)VERIFY LOANS \n2)CHECK CUSTOMER'S WAITING LOAN \n3)CHECK CUSTOMER'S CURRENT LOAN \n4)CHECK CUSTOMER'S EXPIRED LOAN \n5)CUSTOMER'S TOTAL LOAN AMOUNT \n6)TOTAL DUE AMOUNTS \n7)RECENT TRANSACTION \n8)Check client personal detail \n9)LOG OUT")
-        ch = input("ENTER YOUR CHOICE:")
+        print("MAIN MENU \n""***********************************""\n* 1)VERIFY LOANS                  *\n* 2)CHECK CUSTOMER'S WAITING LOAN *\n* 3)CHECK CUSTOMER'S CURRENT LOAN *\n* 4)CHECK CUSTOMER'S EXPIRED LOAN *\n* 5)CUSTOMER'S TOTAL LOAN AMOUNT  *\n* 6)TOTAL DUE AMOUNT              *\n* 7)RECENT TRANSACTION            *\n* 8)CHECK CLIENT PERSONAL DETAILS *\n* 9)LOG OUT                       *\n""***********************************")
+        ch = input("ENTER YOUR CHOICE : ")
         move_tomainmenu(ch, "emp")
         ch = int(ch)
 
         if ch == 1:
             print("1) VERFIY LOANS !!!")
-            os.system("python3 emp_check.py")
+            exec(open("emp_check.py").read())
 
         elif ch == 2:
-            print("CUSTOMER'S WAITING LOAN ARE : ")
             status = "waiting"
-            print(get_data_status(client_data, status))
+            client_datas_ofstatus = get_data_status(client_data, status)
+            if len(client_datas_ofstatus) == 0:
+                print(f"NO {status.upper()} LOAN OUTSTANDING")
+            else:
+                print("CUSTOMER'S WAITING LOAN ARE : ")
+                print(client_datas_ofstatus)
 
         elif ch == 3:
-            print("CUSTOMER'S CURRENT LOAN ARE : ")
             status = "open"
-            print(get_data_status(client_data, status))
+            client_datas_ofstatus = get_data_status(client_data, status)
+            if len(client_datas_ofstatus) == 0:
+                print(f"NO {status.upper()} LOAN OUTSTANDING")
+            else:
+                print("CUSTOMER'S CURRENT LOAN ARE : ")
+                print(client_datas_ofstatus)
 
         elif ch == 4:
-            print("CUSTOMER'S EXPIRED LOAN ARE : ")
             status = "expired"
-            print(get_data_status(client_data, status))
+            client_datas_ofstatus = get_data_status(client_data, status)
+            if len(client_datas_ofstatus) == 0:
+                print(f"NO {status.upper()} LOAN OUTSTANDING")
+            else:
+                print("CUSTOMER'S EXPIRED LOAN ARE : ")
+                print(client_datas_ofstatus)
 
         elif ch == 5:
-            print("CUSTOMER'S TOTAL LOAN AMOUNT IS -> ")
             status = "open"
-            client_data_ofopenloan = get_data_status(client_data, status)
-
-            print("TOTAL LOAN AMOUNT GRAND :", sum(
-                client_data_ofopenloan.loc[:, "Loan_amount"]))
+            client_datas_ofstatus = get_data_status(client_data, status)
+            if len(client_datas_ofstatus) == 0:
+                print(f"NO {status.upper()} LOAN OUTSTANDING")
+            else:
+                print("CUSTOMER'S TOTAL LOAN AMOUNT IS -> ")
+                print(client_datas_ofstatus)
+                print()
+                print("TOTAL LOAN AMOUNT GRANTED IS :", sum(
+                    client_datas_ofstatus.loc[:, "Loan_amount"]))
 
         elif ch == 6:
-            print("TOTAL DUE AMOUNTS")
+            print("TOTAL DUE AMOUNT")
             clients_datas = pd.DataFrame(
                 columns=["client_ids", "loan_id", "Due_amount"])
             i = 1
@@ -72,11 +87,11 @@ while True:
                         client_data, client_id, "open")
                     # print(client_data_temp)
                     sum_due = sum(client_data_temp.loc[:, "Due_amount"])
-                    print("FOR CLIENT", client_id, " Due amount ", sum_due)
+                    print("FOR CLIENT", client_id, " DUE AMOUNT IS ", sum_due)
                     total_due = total_due + sum_due
     #            print(client_ids_pre)
 
-            print("\n TOTAL DUE :", total_due)
+            print("\n TOTAL DUE : ", total_due)
 
         elif ch == 7:
             print("RECENT TRANSACTION : ")
@@ -91,8 +106,12 @@ while True:
             print("LOGGING OUT")
             os.abort()
         else:
-            print("PLZ RE ENTER YOUR CHOICE !!!")
+            print("PLEASE RE ENTER YOUR CHOICE !!!")
             continue
+
+    except ChildProcessError:
+        print("Main Menu")
+        continue
 
     except:
         print("TRY AGAIN !!")

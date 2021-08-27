@@ -2,7 +2,8 @@ import pandas as pd
 import datetime
 from login import clientid
 from dateutil.relativedelta import relativedelta
-from main import due_Date_cal, due_amount_cal, client_loans
+from main import client_loans, Check_loan
+Check_loan()
 
 client_data = pd.read_csv("Client Database.csv",
                           sep=",", header=0)
@@ -14,13 +15,14 @@ client_loan_data = client_loan
 today = datetime.date.today()
 loan_ids = []
 total_due = 0
-#a = input()
+# a = input()
 for i in client_loan_data.index:
     due_Date = client_loan_data.loc[i, "Due_date"]
-    #print("due date", due_Date)
+
+    # print("due date", due_Date)
     if due_Date == "0":
         continue
-
+    due_Date = datetime.date.fromisoformat(due_Date)
     if today > due_Date:
         loan_ids.append(client_loan_data.loc[i, "Loan_id"])
         total_due = total_due + client_loan_data.loc[i, "Due_amount"]
@@ -33,7 +35,7 @@ for i in client_loan_data.index:
         total_due = total_due + client_loan_data.loc[i, "Due_amount"]
         print("*******************************************************************************")
         print(
-            f"NOTE !!!!! DUE DATE FOR LOAN {loan_ids} IS GONE ! DUE AMOUNT IS {total_due} !!!    *")
+            f"NOTE !!!!! DUE DATE FOR LOAN {loan_ids} IS TODAY ! DUE AMOUNT IS {total_due} !!!    *")
         print("*******************************************************************************")
     elif today >= due_Date - relativedelta(days=10):
         loan_ids.append(client_loan_data.loc[i, "Loan_id"])

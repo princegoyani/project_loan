@@ -1,24 +1,31 @@
-import login
-from main import transaction
+from numpy.lib.function_base import _quantile_ureduce_func
+from login import clientid
+from main import transaction, Check_loan, new_loan, pay_now, no_of_loans, pay_shcd
+import os
 # print()
-while True:
+a = 0
+while a == 0:
+    Check_loan()
     try:
-        exec(open("notics.py").read())
-        print("PRESS Q TO RETURN TO MAIN MENU ANYWHERE IN THE PROGRAM !")
+        os.system("notics.py")
+        print("PRESS 'q' TO RETURN TO MAIN MENU ANYWHERE IN THE PROGRAM !")
         print("*******************************")
-        print("* 1.NEW LOAN                  *\n* 2.NO OF LOAN IS             *\n* 3.PREVIOUS TRANSACTION      *\n* 4.PAY YOUR CURRENT LOAN     *\n* 5.PAYMENT SCHEDULE FOR LOAN *\n* 6.LOGOUT                    *")
+        print("* 1.NEW LOAN                  *\n* 2.NO OF LOAN IS             *\n* 3.PREVIOUS TRANSACTION      *\n* 4.PAY YOUR CURRENT LOAN     *\n* 5.PAYMENT SCHEDULE FOR LOAN *\n* 6)LOGOUT                    *")
         print("*******************************")
-        ch = int(input("ENTER YOUR CHOICE : "))
+        ch = int(input("ENTER YOUR CHOICE:"))
 
         if ch == 1:
 
             print("NEW LOAN IS LOADING")
             # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+            # new_loan()
             exec(open("new_loan.py").read())
             continue
         elif ch == 2:
             print("NO OF LOANS IS")
-            exec(open("no_of_loans.py").read())
+            # os.system("no_of_loans.py")
+            # exec(open("no_of_loans.py").read())
+            no_of_loans()
             continue
         elif ch == 3:
             print("YOUR PREVIOUS TRANSACTION IS ")
@@ -28,8 +35,11 @@ while True:
             trans_hist = trans[0]
             trans_am = trans[1]
 
-            print(trans_hist)
-            print("YOUR TOTAL NO. OF PAID AMOUNT IS : ", trans_am)
+            if len(trans_hist) == 0:
+                print("NO PAYMENT TILL !!!")
+            else:
+                print(trans_hist)
+                print("YOUR TOTAL NO. OF PAID AMOUNT IS : ", trans_am)
 
             continue
         elif ch == 4:
@@ -45,14 +55,18 @@ while True:
         elif ch == 6:
             print("LOGING OUT .....")
             print("Thank you For Visting !")
-            # quit()
-            break
+            # KeyError
+            raise ZeroDivisionError
+
         else:
             print("PLZ REENTER YOUR CHOICE !!!")
             continue
+    except ZeroDivisionError:
+        print("LOG OUT !")
+        os.abort()
         break
 
-    except:
+    except ValueError:
         print("INVALID !!!")
         print(" IF ANY PROMBLEM PLEASE CONTACT BANK !!! ")
         continue

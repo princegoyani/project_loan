@@ -1,13 +1,18 @@
 import pandas as pd
+from pandas.core.indexing import check_bool_indexer
 from login import clientid
 import datetime
+import os
 import random
 from dateutil.relativedelta import relativedelta
 from main import due_Date_cal, due_amount_cal, client_loans, Check_loan, move_tomainmenu
-import time
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', None)
+pd.set_option('display.max_colwidth', None)
 
 
-def transaction(client_id, typeofloan, emi, loan_id, due_amount):
+def make_transaction(client_id, typeofloan, emi, loan_id, due_amount):
 
     trans_data = pd.read_csv("Transaction_Database.csv")
     last_index = len(trans_data.index)
@@ -48,14 +53,15 @@ print(client_loan_data)
 
 if len(client_loan_data) == 0:
     print("NO LOAN AMOUNT OUT STANDING")
-    import Main_Menu
+    exec(open("Main_Menu.py").read())
 
 
 while True:
     try:
-        cho_pay_for_check = int(
-            input("Enter For which Loan you want to pay (Enter Index) or Q to quit: "))
+        cho_pay_for_check = input(
+            "Enter For which Loan you want to pay (Enter Index) or Q to quit: ")
         move_tomainmenu(cho_pay_for_check, "client")
+        cho_pay_for_check = int(cho_pay_for_check)
         if cho_pay_for_check in client_loan_data.index.tolist():
             cho_pay_for = cho_pay_for_check
             break
@@ -64,11 +70,10 @@ while True:
             continue
 
     except:
-        print("TRY LATER !")
-        print("QUIT")
-        quit()
-
-        break
+        print("TRY AGAIN !")
+        continue
+        # exec(open("Main_Menu.py").read())
+        # break
 
 #a = input()
 
@@ -91,49 +96,70 @@ rate = client_loan_data_chose["Rate"]
 due_date = client_loan_data_chose["Due_date"]
 due_amount = client_loan_data_chose["Due_amount"]
 starting = client_loan_data_chose["Start_Date"]
+time = client_loan_data_chose["Time"]
+total_pay = emi + due_amount
+
 print(
-    f"YOU WILL PAY FOR EMI {emi} AND DUE AMOUNT {due_amount} : ", emi + due_amount)
+    f"YOU WILL PAY FOR EMI {emi} AND DUE AMOUNT {due_amount} : ", total_pay)
 print()
 # confirm = input("ARE YOU SURE TO PAY (YES or NO):")
-
+# print(emi)
 con_no = 0
 while con_no <= 3:
     confirm = input("\nWant To Continue (YES or NO):")
     move_tomainmenu(confirm, "client")
     if confirm.lower() == "yes" or confirm.lower() == "y":
-        transaction(clientid, typeofloan, emi, loan_id, due_amount)
+        make_transaction(clientid, typeofloan, emi, loan_id, due_amount)
 
         thismonth_interest = balance_out * rate/100/12
         thismonth_principal = emi - thismonth_interest
         Total_principal = principal + thismonth_principal
         Total_interest = thismonth_interest + interest
+        #emi_paid = due_amount/emi
         balance_out = balance_out - thismonth_principal
         no_oftrans = no_oftrans + 1
         due_amount = 0
-        due_date = due_Date_cal(no_oftrans, starting)
+        Starting_date = datetime.date.fromisoformat(str(starting))
+        # as he will pay for this month
+      #  month = (datetime.date.today().year - Starting_date.year) * \
+       #     12 + (datetime.date.today().month - Starting_date.month)
+        ending_date = Starting_date + relativedelta(years=time)
+        due_date = datetime.date.fromisoformat(str(due_date))
+
+        if due_date == ending_date:
+            due_date_fin = due_date
+        else:
+            due_months = due_Date_cal(due_date, Starting_date)
+            print("DUE MONTHS : ", due_months)
+            due_date_fin = due_date + relativedelta(months=due_months + 1)
+
+        # print(emi)
+        #due_date = due_Date_cal(loan_amount, balance_out, emi, starting)
         for i in client_data.index:
             if loan_id == client_data.loc[i, "loan_id"]:
-                client_data.loc[i, "Balance_out"] = balance_out
-                client_data.loc[i, "Total_Principal"] = Total_principal
-                client_data.loc[i, "Total_Interest"] = Total_interest
+                print("here")
+                client_data.loc[i, "Balance_out"] = round(balance_out, 3)
+                client_data.loc[i, "Total_Principal"] = round(
+                    Total_principal, 3)
+                client_data.loc[i, "Total_Interest"] = round(Total_interest, 3)
                 client_data.loc[i, "No_ofTransaction"] = no_oftrans
-                client_data.loc[i, "Due_date"] = due_date
+                client_data.loc[i, "Due_date"] = due_date_fin
                 client_data.loc[i, "Due_amount"] = due_amount
-
         client_data.to_csv("Client Database.csv", index=False)
+        # print(client_data)
         print("Thank You!")
         # main mane
     elif confirm.lower() == "no" or confirm.lower() == "n":
-        print("main manu")
-        import Main_Menu
+        print("Main MENU")
+        # exec(open("Main_Menu.py").read())
         # quit()
-
+        break
     else:
         print("INVALID ANSWER ", 3 - con_no, "try left")
         con_no = con_no + 1
         continue
     break
-
+Check_loan()
 
 # stuff
 

@@ -1,8 +1,15 @@
 # print(" 1.ADD NEW LOAN \n\n 2.CHECK CUSTOMER'S CURRENT LOAN \n\n 3.CHECK CUSTOMER'S TOTAL INSTALLMENTS \n\n 4.CHECK CUSTOMER'S TRANSACTIONS \n\n 5.CHECK CUSTOMER'S RATE OF INTEREST \n\n 6.CHECK CUSTOMER'S TOTAL LOAN AMOUNT  \n\n 7.CHECK CUSTOMER'S PAID AMOUNT OF CURRENT LOAN   \n\n 8.CHECK CUSTOMER'S UNPAID AMOUNT \n\n 9.CHECK CUSTOMER'S NEXT PAYMENT DATE \n\n 10.CHECK CUSTOMER'S LAST DATE FOR PAYING INSTALLMENT OF THIS MONTH \n\n 11.CHECK CUSTOMER'S TIME ALLOTED FOR LOAN COMPLETION (IN YEARS) \n")
 # print()
-from main import client_loans, get_data_status
+from main import client_loans, get_data_status, move_tomainmenu
 import pandas as pd
 import employ_login
+import os
+
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', None)
+pd.set_option('display.max_colwidth', None)
+
 
 client_data = pd.read_csv("Client Database.csv",
                           sep=",", header=0)
@@ -11,11 +18,13 @@ while True:
     try:
         print("PRESS Q TO RETURN TO MAIN MENU ANYWHERE IN THE PROGRAM !")
         print("MAIN MENU \n1)VERIFY LOANS \n2)CHECK CUSTOMER'S WAITING LOAN \n3)CHECK CUSTOMER'S CURRENT LOAN \n4)CHECK CUSTOMER'S EXPIRED LOAN \n5)CUSTOMER'S TOTAL LOAN AMOUNT \n6)TOTAL DUE AMOUNTS \n7)RECENT TRANSACTION \n8)Check client personal detail \n9)LOG OUT")
-        ch = int(input("ENTER YOUR CHOICE:"))
+        ch = input("ENTER YOUR CHOICE:")
+        move_tomainmenu(ch, "emp")
+        ch = int(ch)
 
         if ch == 1:
             print("1) VERFIY LOANS !!!")
-            exec(open("emp_check.py").read())
+            os.system("python3 emp_check.py")
 
         elif ch == 2:
             print("CUSTOMER'S WAITING LOAN ARE : ")
@@ -33,7 +42,7 @@ while True:
             print(get_data_status(client_data, status))
 
         elif ch == 5:
-            print("CUSTOMER'S TOTAL LOAN AMOUNT IS : ")
+            print("CUSTOMER'S TOTAL LOAN AMOUNT IS -> ")
             status = "open"
             client_data_ofopenloan = get_data_status(client_data, status)
 
@@ -63,11 +72,11 @@ while True:
                         client_data, client_id, "open")
                     # print(client_data_temp)
                     sum_due = sum(client_data_temp.loc[:, "Due_amount"])
-                    print("FOR CLIENT", client_id, " due amount ", sum_due)
+                    print("FOR CLIENT", client_id, " Due amount ", sum_due)
                     total_due = total_due + sum_due
     #            print(client_ids_pre)
 
-                print("\n TOTAL DUE :", total_due)
+            print("\n TOTAL DUE :", total_due)
 
         elif ch == 7:
             print("RECENT TRANSACTION : ")
@@ -79,12 +88,12 @@ while True:
             print(client_personal_Data)
 
         elif ch == 9:
-
-            break
-
+            print("LOGGING OUT")
+            os.abort()
         else:
             print("PLZ RE ENTER YOUR CHOICE !!!")
             continue
+
     except:
         print("TRY AGAIN !!")
         print("IF ANY PROBLEM CONTACT ADMIN")

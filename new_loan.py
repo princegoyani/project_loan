@@ -1,9 +1,10 @@
-import pandas as pd
+"""import pandas as pd
 from datetime import date
 from login import clientid
-from main import due_Date_cal, due_amount_cal, monthly_pay_int, move_tomainmenu
+from main import monthly_pay_int, move_tomainmenu
 #from pay_now import due_Date_cal
 from dateutil.relativedelta import relativedelta
+"""
 
 
 def get_loan_amount():
@@ -12,11 +13,13 @@ def get_loan_amount():
             loan_amount = input("Enter The AMOUNT You Want : ")
             move_tomainmenu(loan_amount, "client")
             loan_amount = int(loan_amount)
-            if loan_amount < 100000:
-                print("AMOUNT MUST BE GREATER THEN 1 Lakh")
+            if loan_amount < 10000:
+                print("AMOUNT MUST BE GREATER THEN 10 Thousand ")
                 continue
-
-        except:
+            elif loan_amount > 10000000:
+                print("AMOUNT MUST BE Less then 10 Cr. ")
+                continue
+        except ValueError:
             print("Try Again")
             continue
             # get_pricipal()
@@ -86,11 +89,11 @@ def get_time():
             fortime = input("Enter For How Much Time in Year: ")
             move_tomainmenu(fortime, "client")
             fortime = int(fortime)
-            if 0 > fortime > 10:
-                print("Please Enter Less then 10 Years")
+            if fortime > 10 or fortime < 0:
+                print("Please Enter 10 Years OR less years")
                 continue
 
-        except:
+        except ValueError:
             print("Try Again")
             # get-time()
             continue
@@ -118,7 +121,7 @@ def agaist_mortage(loan_amount):
             else:
                 print("Its Prefect ! ")
 
-        except:
+        except ValueError:
             print("Invalid Input ! ")
             print("Try Again")
             continue
@@ -183,8 +186,8 @@ while True:
     aga_mortage = agaist_mortage(loan_amount)
     cal_month_payment = monthly_pay_int(loan_amount, time, int_rate)
     month_payment = cal_month_payment
-    Interest_amount = (month_payment * time * month) - loan_amount
     total_pay = month_payment * time * month
+    Interest_amount = total_pay - loan_amount
     rou_moth_pay = round(month_payment)
     rou_interest_amount = round(Interest_amount)
     rou_total_pay = round(total_pay)
@@ -196,8 +199,8 @@ while True:
     print("EMI will be :", rou_moth_pay)
     print("Total Payment will be : ", rou_total_pay)
 
-    print("\n1)GET LOAN with same  \n2)Calculate agian \n3)Return To Main Menu ")
     while True:
+        print("\n1)GET LOAN with same  \n2)Calculate agian \n3)Return To Main Menu ")
         choice = input("ENTER HERE : ")
         move_tomainmenu(choice, "client")
         if choice == "1" or "get loan" in choice.lower():
@@ -205,14 +208,15 @@ while True:
             while con_no <= 3:
                 confirm = input("\nWant To Continue (YES or NO):")
                 move_tomainmenu(confirm, "client")
-                if confirm.lower() == "yes" or "y":
-                    add_toCSV(clientid, loan_amount, time,
+                if confirm.lower() == "yes" or confirm.lower() == "y":
+                    add_toCSV(clientid, round(loan_amount, 3), time,
                               typeofloan, round(int_rate, 3), rou_moth_pay, aga_mortage)
                     print("Thank You !")
                     # main mane
-                elif confirm.lower() == "no" or "n":
+                elif confirm.lower() == "no" or confirm.lower() == "n":
                     print("main manu")
-                    import Main_Menu
+                    # exec(open("Main_Menu.py").read())
+                    break
 
                 else:
                     print("INVALID ANSWER ", 3 - con_no, "try left")
@@ -222,14 +226,18 @@ while True:
             break
         elif choice == "2" or "calculate agian" in choice.lower():
             print("LETS TRY AGAIN")
-
+            break
         elif choice == "3" or "return to main menu" in choice.lower():
-            print("main manu")
+            print("Main Menu")
             break
         else:
             print("INVALID")
             continue
-    break
+
+    if choice == "2" or "calculate agian" in choice.lower():
+        continue
+    else:
+        break
 
 
 #import main_man

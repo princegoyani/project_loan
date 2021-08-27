@@ -19,7 +19,7 @@ def login():
             i = 0
             while i < 5:
 
-                input_id = int(input("ENTER YOUR CUSTOUMER ID : "))
+                input_id = int(input("ENTER YOUR CUSTOUMER ID :"))
 
                 for index in loginid.index:
                     dataid = loginid[index]
@@ -32,7 +32,7 @@ def login():
                         while True:
                             password = getpass("ENTER YOUR PASSWORD : ")
                             if str(password) == str(databas.loc[idindex, "Password"]):
-                                print("PASSWORD MATCH")
+                                print("PASWORD MATCH")
                                 # START FROM HERE
                                 break
                             else:
@@ -124,12 +124,8 @@ def registration():
 
 
 while True:
-    
-    print("******************")
-    print("* 1)LOGIN        *\n* 2)Registration *")
-    print("******************")
-    client_chos = input("ENTER YOUR CHOICE : ")
-    
+
+    client_chos = input("1)LOGIN \n2)Registration : \n")
     if client_chos == "1" or "login" == client_chos.lower():
         clientid = login()
         break

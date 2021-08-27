@@ -1,5 +1,4 @@
 import pandas as pd
-import csv
 import random
 
 database = pd.read_csv("Client_Personal_Info.csv", sep=",", header=0)
